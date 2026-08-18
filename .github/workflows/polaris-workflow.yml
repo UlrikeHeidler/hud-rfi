@@ -30,6 +30,10 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
       - name: Make build script executable
         run: chmod +x build-all.sh
+      - name: Show token permissions
+        run: |
+        echo "Repository: ${{ github.repository }}"
+        echo "Actor: ${{ github.actor }}"
       - name: Polaris Security Scan
         id: polaris-scan
         uses: blackduck-inc/black-duck-security-scan@v2
@@ -50,3 +54,4 @@ jobs:
           ### SARIF report parameters
           polaris_upload_sarif_report: false  # Upload SARIF report in GitHub Advanced Security tab
           polaris_reports_sarif_create: false  # Create SARIF report and upload it as artifact
+          fixPR 
