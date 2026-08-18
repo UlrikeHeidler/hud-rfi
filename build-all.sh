@@ -2,7 +2,7 @@
 
 # Java
 echo "Building Java"
-mvn -f java/pom.xml compile
+mvn clean -f java/src/main/java/com/example/pom.xml compile
 
 # C
 echo "Building C"
