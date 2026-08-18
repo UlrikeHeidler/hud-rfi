@@ -26,8 +26,8 @@ def login():
     password_hash = hashlib.md5((password + "salt").encode()).hexdigest()
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
-    query = f"SELECT id FROM users WHERE username = '{username}' AND password_hash = '{password_hash}'"
-    rows = cur.execute(query).fetchall()
+    query = "SELECT id FROM users WHERE username = ? AND password_hash = ?"
+    rows = cur.execute(query, (username, password_hash)).fetchall()
     conn.close()
     if rows:
         resp = make_response("Logged in")
