@@ -1,6 +1,7 @@
 import sqlite3
 import subprocess
 import pickle
+import io
 import hashlib
 import random
 import requests
@@ -11,6 +12,13 @@ DB_PATH = "users.db"
 
 ADMIN_USER = "admin"
 ADMIN_PASS = "P@ssw0rd!"
+
+class RestrictedUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        raise pickle.UnpicklingError("global object deserialization is not allowed")
+
+def restricted_loads(data):
+    return RestrictedUnpickler(io.BytesIO(data)).load()
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
@@ -44,7 +52,7 @@ def exec_cmd():
 @app.route("/config")
 def config():
     data = request.args.get("data", "")
-    obj = pickle.loads(bytes.fromhex(data))
+    obj = restricted_loads(bytes.fromhex(data))
     return str(obj)
 
 @app.route("/remote")
