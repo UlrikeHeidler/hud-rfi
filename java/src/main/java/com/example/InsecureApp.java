@@ -1,4 +1,4 @@
-package com.example;
+package java.src.main.java.com.example;
 
 import java.io.*;
 import java.net.*;
