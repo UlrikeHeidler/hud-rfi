@@ -37,7 +37,7 @@ jobs:
       BRIDGE_GITHUB_REPOSITORY_NAME: ${{ github.event.repository.name }}
       BRIDGE_GITHUB_REPOSITORY_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       ### LOCAL ANALYSIS
-      BRIDGE_COVERITY_LOCAL: "false"
+      BRIDGE_COVERITY_LOCAL: "true"
       ### PULL REQUEST COMMENTS
       BRIDGE_COVERITY_PRCOMMENT_ENABLED: "true"
       ### GITHUB TOKEN
