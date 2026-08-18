@@ -4,6 +4,7 @@ import pickle
 import hashlib
 import random
 import requests
+import ast
 from flask import Flask, request, make_response
 
 app = Flask(__name__)
@@ -56,8 +57,45 @@ def remote():
 @app.route("/calc")
 def calc():
     expr = request.args.get("expr", "1+2")
-    result = eval(expr)
-    return str(result)
+    try:
+        node = ast.parse(expr, mode="eval")
+
+        def safe_eval(n):
+            if isinstance(n, ast.Expression):
+                return safe_eval(n.body)
+            if isinstance(n, ast.Constant) and isinstance(n.value, (int, float)):
+                return n.value
+            if isinstance(n, ast.Num):
+                return n.n
+            if isinstance(n, ast.BinOp) and isinstance(n.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.Pow)):
+                left = safe_eval(n.left)
+                right = safe_eval(n.right)
+                if isinstance(n.op, ast.Add):
+                    return left + right
+                if isinstance(n.op, ast.Sub):
+                    return left - right
+                if isinstance(n.op, ast.Mult):
+                    return left * right
+                if isinstance(n.op, ast.Div):
+                    return left / right
+                if isinstance(n.op, ast.FloorDiv):
+                    return left // right
+                if isinstance(n.op, ast.Mod):
+                    return left % right
+                if isinstance(n.op, ast.Pow):
+                    return left ** right
+            if isinstance(n, ast.UnaryOp) and isinstance(n.op, (ast.UAdd, ast.USub)):
+                operand = safe_eval(n.operand)
+                if isinstance(n.op, ast.UAdd):
+                    return +operand
+                if isinstance(n.op, ast.USub):
+                    return -operand
+            raise ValueError("Invalid expression")
+
+        result = safe_eval(node)
+        return str(result)
+    except Exception:
+        return "Invalid expression", 400
 
 if __name__ == "__main__":
     init_db()
