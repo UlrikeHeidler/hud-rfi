@@ -54,4 +54,3 @@ jobs:
           ### SARIF report parameters
           polaris_upload_sarif_report: false  # Upload SARIF report in GitHub Advanced Security tab
           polaris_reports_sarif_create: false  # Create SARIF report and upload it as artifact
-          fixPR 
