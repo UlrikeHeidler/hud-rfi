@@ -52,7 +52,8 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v5
-
+      - name: Make build script executable
+        run: chmod +x build-all.sh
       - name: Download & Setup Bridge CLI on Windows
         if: runner.os == 'Windows'
         shell: powershell
