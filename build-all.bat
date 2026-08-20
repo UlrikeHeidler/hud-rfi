@@ -1,6 +1,5 @@
 @echo off
 
-cd "C:\Users\UlrikeHeidler\OneDrive - Black Duck Software\Work\Prospects\HUD - Housing and Urban Development\20260715 - HUD OIG RFI\HUD Follow Up Input\RE_ HUD RFI"
 echo BUILD SCRIPT STARTED > build.log
 REM C#
 dotnet build csharp\InsecureService.csproj
