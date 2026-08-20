@@ -7,7 +7,7 @@
 # Specifies where the analysis results should be sent.
 capture:
   build:
-    build-command: "cmd /c build-all.sh"
+    build-command: "build-all.sh"
 
 analyze:
   checkers:
