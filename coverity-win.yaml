@@ -15,8 +15,10 @@ analyze:
     c-family-security: true
 
   cov-analyze-args: 
+    - --security
     - --enable
-    - SECURE_CODING
+    - STRING_OVERFLOW
+    - --distrust-filesystem
     - --distrust-command-line
     - --checker-option 
     - RESOURCE_LEAK:allow_main:true
