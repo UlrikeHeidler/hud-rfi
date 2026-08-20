@@ -17,6 +17,9 @@ analyze:
   cov-analyze-args: 
     - --enable
     - SECURE_CODING
+    - --distrust-command-line
+    - --checker-option 
+    - RESOURCE_LEAK:allow_main:true
 
 commit:
 
