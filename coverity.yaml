@@ -5,6 +5,19 @@
 # For help on configuration syntax:     coverity help config --syntax
 
 # Specifies where the analysis results should be sent.
+capture:
+  build:
+    build-command: "cmd /c build-all.bat"
+
+analyze:
+  checkers:
+    all : true
+    c-family-security: true
+
+  cov-analyze-args: 
+    - --enable
+    - SECURE_CODING
+
 commit:
 
   # Coverity Connect configuration to use when committing defects to Coverity

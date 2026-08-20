@@ -1,2 +1,9 @@
 .codesight/
 idir/
+.bridge/
+c/insecure.exe
+csharp/bin/
+csharp/obj/
+java/src/main/java/com/example/*.class
+build.log
+schema.json
