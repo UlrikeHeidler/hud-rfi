@@ -12,8 +12,7 @@ capture:
 analyze:
   checkers:
     all : true
-    c-family-security: true
-
+  
   cov-analyze-args: 
     - --security
     - --enable
