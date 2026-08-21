@@ -7,3 +7,5 @@ csharp/obj/
 java/src/main/java/com/example/*.class
 build.log
 schema.json
+.claude/
+.coverity_scratch/
