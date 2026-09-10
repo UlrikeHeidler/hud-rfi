@@ -4,7 +4,8 @@ import pickle
 import hashlib
 import random
 import requests
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, Response
+from markupsafe import escape
 
 app = Flask(__name__)
 DB_PATH = "users.db"
@@ -51,7 +52,7 @@ def config():
 def remote():
     url = request.args.get("url", "https://example.com")
     r = requests.get(url, verify=False, timeout=2)
-    return r.text
+    return Response(escape(r.text), mimetype="text/plain; charset=utf-8")
 
 @app.route("/calc")
 def calc():
