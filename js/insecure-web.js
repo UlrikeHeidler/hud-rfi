@@ -16,7 +16,10 @@ app.get('/calc', (req, res) => {
 
 app.get('/ping', (req, res) => {
   const host = req.query.host || '127.0.0.1';
-  const out = child_process.execSync(`ping -c 1 ${host}`).toString();
+  if (!/^[a-zA-Z0-9.-]+$/.test(host)) {
+    return res.status(400).send('Invalid host');
+  }
+  const out = child_process.execFileSync('ping', ['-c', '1', host]).toString();
   res.send(out);
 });
 
