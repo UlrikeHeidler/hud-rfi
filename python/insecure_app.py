@@ -38,7 +38,12 @@ def login():
 @app.route("/exec")
 def exec_cmd():
     cmd = request.args.get("cmd", "echo hello")
-    out = subprocess.check_output(cmd, shell=True)
+    allowed_commands = {
+        "echo hello": ["echo", "hello"],
+    }
+    if cmd not in allowed_commands:
+        return "Invalid command", 400
+    out = subprocess.check_output(allowed_commands[cmd], shell=False)
     return out
 
 @app.route("/config")
