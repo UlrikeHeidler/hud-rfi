@@ -4,6 +4,7 @@ import pickle
 import hashlib
 import random
 import requests
+import ast
 from flask import Flask, request, make_response
 
 app = Flask(__name__)
@@ -56,7 +57,40 @@ def remote():
 @app.route("/calc")
 def calc():
     expr = request.args.get("expr", "1+2")
-    result = eval(expr)
+    try:
+        node = ast.parse(expr, mode="eval")
+    except SyntaxError:
+        return "Invalid expression", 400
+
+    allowed_binops = {
+        ast.Add: lambda a, b: a + b,
+        ast.Sub: lambda a, b: a - b,
+        ast.Mult: lambda a, b: a * b,
+        ast.Div: lambda a, b: a / b,
+        ast.FloorDiv: lambda a, b: a // b,
+        ast.Mod: lambda a, b: a % b,
+        ast.Pow: lambda a, b: a ** b,
+    }
+    allowed_unaryops = {
+        ast.UAdd: lambda a: +a,
+        ast.USub: lambda a: -a,
+    }
+
+    def eval_expr(node):
+        if isinstance(node, ast.Expression):
+            return eval_expr(node.body)
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return node.value
+        if isinstance(node, ast.BinOp) and type(node.op) in allowed_binops:
+            return allowed_binops[type(node.op)](eval_expr(node.left), eval_expr(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in allowed_unaryops:
+            return allowed_unaryops[type(node.op)](eval_expr(node.operand))
+        raise ValueError("Invalid expression")
+
+    try:
+        result = eval_expr(node)
+    except (ValueError, TypeError, ZeroDivisionError, OverflowError):
+        return "Invalid expression", 400
     return str(result)
 
 if __name__ == "__main__":
